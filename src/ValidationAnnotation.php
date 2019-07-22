@@ -38,7 +38,7 @@ final class ValidationAnnotation
      * @param array $parameter
      */
     public function executeValidationInParameter(array $parameter): void
-    { 
+    {
         foreach ($this->rules as $rule) {
             $nameWithoutParenthesis = $this->clearFunctionName($rule);
             $ruleToTest = $this->getFunctionParameters($rule) !== '' ?
@@ -64,7 +64,7 @@ final class ValidationAnnotation
                 'positive' => '{{name}} precisa ser positivo.',
                 'notEmpty' => '{{name}} não pode ser vazio.',
                 'notBlank' => '{{name}} não pode estar em branco.'
-            ]); 
+            ]);
             $this->error[] = $err->getMessages()[0];
             $this->allErrorMessages[] = $err->getMessages();
         }

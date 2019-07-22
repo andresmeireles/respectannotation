@@ -90,7 +90,7 @@ final class RespectValidationAnnotation
         array_walk($nestedMessages, static function ($message) use (&$listOfMessages) {
             array_map(static function ($m) use (&$listOfMessages) {
                 $listOfMessages[] = $m;
-            }, $message); 
+            }, $message);
         });
 
         return $listOfMessages;
