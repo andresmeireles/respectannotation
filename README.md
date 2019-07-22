@@ -89,9 +89,11 @@ sf, zend, not
 
 ## Contributing
 
-TBD
+<!-- Please see [CONTRIBUTING](CONTRIBUTING.md) for details. -->
 
-<!-- Please see [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) for details. -->
+## Code of Conduct
+
+[CODE_OF_CONDUCT](CODE_OF_CONDUCT.md).
 
 ## License
 
