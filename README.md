@@ -107,7 +107,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-downloads]: https://img.shields.io/packagist/dt/:vendor/:package_name.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/andresmeireles/respectannotation
-[link-travis]: https://travis-ci.org/andresmeireles/respectannotation
+[link-travis]: https://travis-ci.org/andresmeireles/respectannotation.svg?branch=master
 [link-scrutinizer]: https://scrutinizer-ci.com/g/andresmeireles/respectannotation/code-structure/master
 [link-code-quality]: https://scrutinizer-ci.com/g/andresmeireles/respectannotation/<Paste>
 [link-downloads]: https://packagist.org/packages/andresmeireles/respectannotation
