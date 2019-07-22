@@ -99,12 +99,12 @@ sf, zend, not
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/:vendor/:package_name.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/andresmeireles/respectannotation.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/:vendor/:package_name/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/:vendor/:package_name.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/:vendor/:package_name.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/:vendor/:package_name.svg?style=flat-square
+[ico-travis]: https://travis-ci.org/andresmeireles/respectannotation.svg?branch=master
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/andresmeireles/respectannotation.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/andresmeireles/respectannotation.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/andresmeireles/respectannotation.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/andresmeireles/respectannotation
 [link-travis]: https://travis-ci.org/andresmeireles/respectannotation.svg?branch=master
