@@ -4,6 +4,7 @@ namespace Andresmeireles\RespectAnnotation;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionException;
 use ReflectionProperty;
 
@@ -23,6 +24,8 @@ final class RespectValidationAnnotation
      */
     public function executeClassValidation(object $class): ?array
     {
+        AnnotationRegistry::registerFile(__DIR__.'/ValidationAnnotation.php');
+
         $firstValidationError = [];
         $reader = new AnnotationReader();
         $reflectionClass = new \ReflectionClass($class);
@@ -39,8 +42,9 @@ final class RespectValidationAnnotation
                 $this->allValidationErrors[] = $validations->getAllValidationErrors();
             }
         }
+        $cleanedNullValues = $this->clearNullValues($firstValidationError);
 
-        return $this->clearNullValues($firstValidationError);
+        return $cleanedNullValues === null ? $cleanedNullValues : $this->putSameArrayMessages($cleanedNullValues);
     }
 
     /**
@@ -51,7 +55,8 @@ final class RespectValidationAnnotation
     private function getClassPropertyValue(object $class, ReflectionProperty $property)
     {
         if ($property->isPublic()) {
-            return $property->getName();
+            $propertyName = $property->getName();
+            return $class->{$propertyName};
         }
 
         $methodName = sprintf('get%s', ucfirst($property->getName()));
@@ -75,6 +80,21 @@ final class RespectValidationAnnotation
         return $validationValues === [] ? null : $validationValues;
     }
 
+    /**
+     * @param array $nestedMessages
+     * @return array
+     */
+    private function putSameArrayMessages(array $nestedMessages): array
+    {
+        $listOfMessages = [];
+        array_walk($nestedMessages, static function ($message) use (&$listOfMessages) {
+            array_map(static function ($m) use (&$listOfMessages) {
+                $listOfMessages[] = $m;
+            }, $message); 
+        });
+
+        return $listOfMessages;
+    }
 
     /**
      * @return array|null
