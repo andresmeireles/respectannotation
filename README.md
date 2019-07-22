@@ -106,13 +106,14 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/:vendor/:package_name.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/:vendor/:package_name.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/:vendor/:package_name
-[link-travis]: https://travis-ci.org/:vendor/:package_name
-[link-scrutinizer]: https://scrutinizer-ci.com/g/andresmeireles/respectannotation/?branch=master <!-- https://scrutinizer-ci.com/g/:vendor/:package_name/code-structure -->
-[link-code-quality]: https://scrutinizer-ci.com/g/:vendor/:package_name
-[link-downloads]: https://packagist.org/packages/:vendor/:package_name
-[link-author]: https://github.com/:author_username
+[link-packagist]: https://packagist.org/packages/andresmeireles/respectannotation
+[link-travis]: https://travis-ci.org/andresmeireles/respectannotation
+[link-scrutinizer]: https://scrutinizer-ci.com/g/andresmeireles/respectannotation/code-structure/master
+[link-code-quality]: https://scrutinizer-ci.com/g/andresmeireles/respectannotation/<Paste>
+[link-downloads]: https://packagist.org/packages/andresmeireles/respectannotation
+[link-author]: https://andresmeireles.github.io/
 [link-contributors]: ../../contributors
+
 [dev-roadmap]: https://github.com/kamranahmedse/developer-roadmap
 [respect-validation]: https://github.com/Respect/Validation
 [doctrine]: https://www.doctrine-project.org/
