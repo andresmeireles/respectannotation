@@ -6,3 +6,5 @@ phpunit.xml
 .phpunit.result.cache
 ISSUE_TEMPLATE.md
 PULL_REQUEST_TEMPLATE.md
+.idea/
+
