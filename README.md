@@ -80,20 +80,17 @@ $ composer test
 
 ## Limitações
 
-Ainda não é possivel utilizar alguns tipos de validadores mais complexos como optional, 
-sf, zend, not
-## TODO
-
-- Anotação para o uso do validador `optional`
-- Anotação para uso do validador `not`
+Ainda não é possivel utilizar alguns tipos de validadores mais complexos como 
+sf ou zend.
 
 ## Contributing
 
+TBD
 <!-- Please see [CONTRIBUTING](CONTRIBUTING.md) for details. -->
 
 ## Code of Conduct
 
-[CODE_OF_CONDUCT](CODE_OF_CONDUCT.md).
+[Code of conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
