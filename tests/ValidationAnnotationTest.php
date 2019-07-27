@@ -6,58 +6,181 @@ use PHPUnit\Framework\TestCase;
 
 class ValidationAnnotationTest extends TestCase
 {
-    public function testExecuteValidationInParameter(): void
+    public function testValidateParameterWithRulesOnly(): void
     {
-        $rules = ['value' => ['notEmpty']];
+        $rules = [
+            'rules' => ['notEmpty']
+        ];
         $validator = new ValidationAnnotation($rules);
-        $this->assertNull($validator->executeValidationInParameter([0 => 'joao']));
+        $result = $validator->validateParameter([0 => 'joao']);
+        $this->assertEquals(['errors' => null, 'allErrors' => null], $result);
     }
 
-    public function testExecuteValidationWithManyRules(): void
+    public function testValidateParameterWithRulesOnlyFail(): void
     {
-        $rules = ['value' => ['notEmpty', 'notBlank', 'alpha']];
+        $rules = [
+            'rules' => ['notEmpty']
+        ];
         $validator = new ValidationAnnotation($rules);
-        $this->assertNull($validator->executeValidationInParameter([0 => 'joao']));
+        $result = $validator->validateParameter(['jose' => '']);
+        $this->assertEquals(
+            [
+                'errors' => ['jose não pode ser vazio.'],
+                'allErrors' => [['jose não pode ser vazio.']]],
+            $result
+        );
     }
 
-    public function testExecuteValidationWithRulesWithParam(): void
+    public function testValidateParameterWithRulesOnlyMultipleFail(): void
     {
-        $rules = ['value' => ['notEmpty', 'notBlank', 'alpha', 'length(3)']];
+        $rules = [
+            'rules' => ['noWhitespace', 'numeric']
+        ];
         $validator = new ValidationAnnotation($rules);
-        $this->assertNull($validator->executeValidationInParameter([0 => 'joao']));
+        $result = $validator->validateParameter(['jose' => 'fred H']);
+        $this->assertEquals(
+            [
+                'errors' => ['jose must not contain whitespace', 'jose precisa ser um número.'],
+                'allErrors' => [
+                        ['jose must not contain whitespace'],
+                        ['jose precisa ser um número.']
+                ]
+            ],
+            $result
+        );
     }
 
-    public function testGetValidationErrorsNullResult()
+    public function testValidateParameterWithOptionalRulesOnly(): void
     {
-        $rules = ['value' => ['notEmpty', 'notBlank', 'alpha', 'length(2)']];
+        $rules = [
+            'optrules' => ['alpha']
+        ];
         $validator = new ValidationAnnotation($rules);
-        $validator->executeValidationInParameter([0 => 'joao']);
-        $result = $validator->getValidationErrors();
-        $this->assertEquals(null, $result);
+        $result = $validator->validateParameter([0 => '']);
+        $this->assertEquals(['errors' => null, 'allErrors' => null], $result);
     }
 
-    public function testGetValidationErrorsSingleError()
+    public function testValidateParameterWithOptionalRulesOnlyFail(): void
     {
-        $rules = ['value' => ['notEmpty', 'notBlank', 'alpha', 'length(2)', 'noWhitespace']];
+        $rules = [
+            'optrules' => ['numeric']
+        ];
         $validator = new ValidationAnnotation($rules);
-        $validator->executeValidationInParameter([0 => 'joao do ceu']);
-        $result = $validator->getValidationErrors();
-        $this->assertEquals(['"joao do ceu" must not contain whitespace'], $result);
+        $result = $validator->validateParameter([0 => 'jose']);
+        $assertResult = [
+            'errors' => ['"jose" precisa ser um número.'],
+            'allErrors' => [
+
+                    ['"jose" precisa ser um número.']
+
+            ]
+        ];
+        $this->assertEquals($assertResult, $result);
     }
 
-    public function testGetValidationErrorsMultiErrors()
+    public function testValidateParameterWithOptionalRulesOnlyMultipleFail(): void
     {
-        $rules = ['value' => ['notEmpty', 'notBlank', 'alpha', 'length(50)', 'noWhitespace']];
+        $rules = [
+            'optrules' => ['numeric', 'noWhitespace']
+        ];
         $validator = new ValidationAnnotation($rules);
-        $validator->executeValidationInParameter([0 => 'joao do ceu']);
-        $result = $validator->getAllValidationErrors();
-        $this->assertEquals([
-           [
-               '"joao do ceu" must have a length greater than "50"'
-           ],
-           [
-               '"joao do ceu" must not contain whitespace'
-           ]
-        ], $result);
+        $result = $validator->validateParameter([0 => 'jose de arimateia']);
+        $assertResult = [
+            'errors' => [
+                '"jose de arimateia" precisa ser um número.',
+                '"jose de arimateia" must not contain whitespace'
+            ],
+            'allErrors' => [
+                    ['"jose de arimateia" precisa ser um número.'],
+                    ['"jose de arimateia" must not contain whitespace']
+            ]
+        ];
+        $this->assertEquals($assertResult, $result);
+    }
+
+    public function testValidateParameterWithNotRulesOnly(): void
+    {
+        $rules = [
+            'notrules' => ['alpha']
+        ];
+        $validator = new ValidationAnnotation($rules);
+        $result = $validator->validateParameter([0 => '']);
+        $this->assertEquals(['errors' => null, 'allErrors' => null], $result);
+    }
+
+    public function testValidateParameterWithNotRulesOnlyFail(): void
+    {
+        $rules = [
+            'notrules' => ['numeric']
+        ];
+        $validator = new ValidationAnnotation($rules);
+        $result = $validator->validateParameter([0 => '123']);
+        $assertResult = [
+            'errors' => ['"123" precisa ser um número.'],
+            'allErrors' => [
+                    ['"123" precisa ser um número.']
+            ]
+        ];
+        $this->assertEquals($assertResult, $result);
+    }
+
+    public function testValidateParameterWithOptionalRulesNotMultipleFail(): void
+    {
+        $rules = [
+            'notrules' => ['numeric', 'noWhitespace']
+        ];
+        $validator = new ValidationAnnotation($rules);
+        $result = $validator->validateParameter([0 => 2]);
+        $assertResult = [
+            'errors' => [
+                '2 precisa ser um número.',
+                '2 must not not contain whitespace'
+            ],
+            'allErrors' => [
+                    ['2 precisa ser um número.'],
+                    ['2 must not not contain whitespace']
+            ]
+        ];
+        $this->assertEquals($assertResult, $result);
+    }
+
+    public function testValidateParameterWithMultipleRules(): void
+    {
+        $rules = [
+            'rules' => ['notEmpty'],
+            'notrules' => ['numeric'],
+            'optional' => ['noWhitespace']
+        ];
+        $validator = new ValidationAnnotation($rules);
+        $result = $validator->validateParameter(['hexer']);
+        $assertResult = ['errors' => null, 'allErrors' => null];
+        $this->assertEquals($assertResult, $result);
+    }
+
+    public function testValidateParameterWithMultipleRulesFail(): void
+    {
+        $rules = [
+            'rules' => ['alpha'],
+            'notrules' => ['numeric'],
+            'optrules' => ['alpha']
+        ];
+        $validator = new ValidationAnnotation($rules);
+        $result = $validator->validateParameter(['jose' => '88']);
+        $assertResult = [
+            'errors' => [
+                'jose must contain only letters (a-z)',
+                'jose must contain only letters (a-z)',
+                'jose precisa ser um número.'
+            ],
+            'allErrors' => [
+                   ['jose must contain only letters (a-z)']
+                ,
+                   ['jose must contain only letters (a-z)']
+                ,
+                   ['jose precisa ser um número.']
+
+            ]
+        ];
+        $this->assertEquals($assertResult, $result);
     }
 }

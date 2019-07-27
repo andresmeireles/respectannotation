@@ -7,17 +7,17 @@ use Andresmeireles\RespectAnnotation\ValidationAnnotation as Respect;
 class PublicEntity
 {
     /**
-     * @Respect({"noWhitespace", "alpha"})
+     * @Respect(RULES={"noWhitespace", "alpha"})
      */
     public $name;
 
     /**
-     * @Respect({"alpha", "noWhitespace"})
+     * @Respect(RULES={"alpha", "noWhitespace"})
      */
     public $lastName;
 
     /**
-     * @Respect({"notBlank", "notEmpty", "numeric"})
+     * @Respect(RULES={"notBlank", "notEmpty", "numeric"})
      */
     public $age;
 }

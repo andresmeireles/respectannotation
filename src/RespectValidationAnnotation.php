@@ -7,6 +7,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionException;
 use ReflectionProperty;
+use function PHPUnit\Framework\StaticAnalysis\HappyPath\AssertNull\consume;
 
 /**
  * Class RespectValidationAnnotation
@@ -14,7 +15,9 @@ use ReflectionProperty;
  */
 final class RespectValidationAnnotation
 {
-    private $allValidationErrors;
+    private $errors;
+
+    private $allErrors;
 
     /**
      * @param object $class
@@ -24,27 +27,39 @@ final class RespectValidationAnnotation
      */
     public function executeClassValidation(object $class): ?array
     {
-        AnnotationRegistry::registerFile(__DIR__.'/ValidationAnnotation.php');
+        AnnotationRegistry::registerFile(__DIR__ . '/ValidationAnnotation.php');
 
-        $firstValidationError = [];
         $reader = new AnnotationReader();
         $reflectionClass = new \ReflectionClass($class);
         $props = $reflectionClass->getProperties();
         foreach ($props as $prop) {
             $reflecProp = new ReflectionProperty($class, $prop->getName());
-            //$getMethodName = sprintf('get%s', ucfirst($reflecProp->getName()));
             $valueForValidation = $this->getClassPropertyValue($class, $reflecProp);
             $validations = $reader->getPropertyAnnotation($reflecProp, ValidationAnnotation::class);
-
             if ($validations instanceof ValidationAnnotation) {
-                $validations->executeValidationInParameter([$reflecProp->getName() => $valueForValidation]);
-                $firstValidationError[] = $validations->getValidationErrors();
-                $this->allValidationErrors[] = $validations->getAllValidationErrors();
+                $errors = $validations->validateParameter(
+                    [$reflecProp->getName() => $valueForValidation]
+                );
+                $this->allocateErrors($errors);
             }
         }
-        $cleanedNullValues = $this->clearNullValues($firstValidationError);
+        $cleanedMessages = $this->clearNullValues($this->errors);
 
-        return $cleanedNullValues === null ? $cleanedNullValues : $this->putSameArrayMessages($cleanedNullValues);
+        return $cleanedMessages === null ? $cleanedMessages : $this->putSameArrayMessages($cleanedMessages);
+    }
+
+    private function allocateErrors(array $errors): void
+    {
+        $this->errors[] = $errors['errors'];
+        $this->allErrors[] = $errors['allErrors'];
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAllErrorMessages(): ?array
+    {
+        return $this->clearNullValues($this->allErrors);
     }
 
     /**
@@ -69,11 +84,28 @@ final class RespectValidationAnnotation
      * @param array $validationValues
      * @return array|null
      */
-    private function clearNullValues(array $validationValues): ?array
+    private function clearNullValues(?array $validationValues): ?array
     {
+        if ($validationValues === null) {
+            return null;
+        }
+
         foreach ($validationValues as $key => $value) {
             if ($value === null) {
                 unset($validationValues[$key]);
+                continue;
+            }
+            if (is_array($value)) {
+                $this->clearNullValues($value);
+            }
+        }
+        foreach ($validationValues as $key => $value) {
+            if ($value === null) {
+                unset($validationValues[$key]);
+                continue;
+            }
+            if (is_array($value)) {
+                $this->clearNullValues($value);
             }
         }
 
@@ -94,13 +126,5 @@ final class RespectValidationAnnotation
         });
 
         return $listOfMessages;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getAllErrorMessages(): ?array
-    {
-        return $this->clearNullValues($this->allValidationErrors);
     }
 }
