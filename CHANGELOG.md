@@ -4,19 +4,21 @@ All notable changes to `andresmeireles\respectannotation` will be documented in 
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
-## [0.1] - 2019-07-22
+## [1.0] - 2019-07-30
 
 ### Added
-- Everything :)
+- RuleValidator
+- not validator
+- optionalValidator
 
 ### Deprecated
 - Nothing
 
 ### Fixed
-- Nothing
+- tests
 
 ### Removed
-- Nothing
+- Old way to do validators and write in constraits
 
 ### Security
 - Nothing
