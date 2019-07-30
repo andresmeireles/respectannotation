@@ -110,7 +110,6 @@ class RespectValidationAnnotationTest extends TestCase
         $testEntity->age = 'ss';
         $validator->executeClassValidation($testEntity);
         $result = $validator->getAllErrorMessages();
-        var_dump($result);
         $this->assertEquals([
             0 => [
                 [

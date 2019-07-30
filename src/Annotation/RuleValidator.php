@@ -26,12 +26,7 @@ class RuleValidator
      */
     private $allErrors;
 
-//    public function __construct(array $rules)
-//    {
-//        $this->rules = $rules;
-//    }
-
-    public function useRules(array $rules)
+    public function useRules(array $rules): void
     {
         $this->rules = $rules;
     }

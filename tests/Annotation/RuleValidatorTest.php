@@ -7,10 +7,10 @@ use PHPUnit\Framework\TestCase;
 class RuleValidatorTest extends TestCase
 {
 
-    public function testExecuteNotValidationInParameter()
+    public function testExecuteNotValidationInParameter(): void
     {
         $rules = ['notEmpty'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();$validator->useRules($rules);
         $validator->executeNotValidationInParameter([0 => '']);
         $this->assertNull($validator->getValidationErrors());
     }
@@ -18,7 +18,8 @@ class RuleValidatorTest extends TestCase
     public function testExecuteNotValidationInParameterError()
     {
         $rules = ['notEmpty'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();
+        $validator->useRules($rules);
         $validator->executeNotValidationInParameter([0 => 'joao']);
         $result = $validator->getValidationErrors();
         $this->assertEquals(['"joao" não pode ser vazio.'], $result);
@@ -27,7 +28,8 @@ class RuleValidatorTest extends TestCase
     public function testGetAllValidationErrors()
     {
         $rules = ['notEmpty'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();
+        $validator->useRules($rules);
         $validator->executeDefaultValidationInParameter([0 => 'joao']);
         $result = $validator->getAllValidationErrors();
         $this->assertNull($result);
@@ -36,7 +38,8 @@ class RuleValidatorTest extends TestCase
     public function testGetAllValidationErrorsPositive()
     {
         $rules = ['notEmpty'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();
+        $validator->useRules($rules);
         $validator->executeDefaultValidationInParameter([0 => '']);
         $result = $validator->getAllValidationErrors();
         $this->assertIsArray($result);
@@ -45,7 +48,8 @@ class RuleValidatorTest extends TestCase
     public function testGetAllValidationErrorsPositiveMessage()
     {
         $rules = ['notEmpty'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();
+        $validator->useRules($rules);
         $validator->executeDefaultValidationInParameter([0 => '']);
         $result = $validator->getAllValidationErrors();
         $this->assertEquals([['"" não pode ser vazio.']], $result);
@@ -54,7 +58,8 @@ class RuleValidatorTest extends TestCase
     public function testGetValidationErrors()
     {
         $rules = ['notEmpty'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();
+        $validator->useRules($rules);
         $validator->executeDefaultValidationInParameter([0 => 'joao']);
         $result = $validator->getValidationErrors();
         $this->assertNull($result);
@@ -63,7 +68,8 @@ class RuleValidatorTest extends TestCase
     public function testGetValidationErrorsPositive()
     {
         $rules = ['notEmpty'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();
+        $validator->useRules($rules);
         $validator->executeDefaultValidationInParameter([0 => '']);
         $result = $validator->getValidationErrors();
         $this->assertIsArray($result);
@@ -72,47 +78,38 @@ class RuleValidatorTest extends TestCase
     public function testGetValidationErrorsPositiveMessage()
     {
         $rules = ['notEmpty'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();
+        $validator->useRules($rules);
         $validator->executeDefaultValidationInParameter([0 => '']);
         $result = $validator->getValidationErrors();
         $this->assertEquals(['"" não pode ser vazio.'], $result);
     }
-//
-//    public function testExecuteOptionalValidationInParameter()
-//    {
-//
-//    }
-//
-//    public function testExecuteDefaultValidationInParameter()
-//    {
-//
-//    }
 
     public function testExecuteValidationInParameter(): void
     {
         $rules = ['notEmpty'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();$validator->useRules($rules);
         $this->assertNull($validator->executeDefaultValidationInParameter([0 => 'joao']));
     }
 
     public function testExecuteValidationWithManyRules(): void
     {
         $rules = ['notEmpty', 'notBlank', 'alpha'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();$validator->useRules($rules);
         $this->assertNull($validator->executeDefaultValidationInParameter([0 => 'joao']));
     }
 
     public function testExecuteValidationWithRulesWithParam(): void
     {
         $rules = ['notEmpty', 'notBlank', 'alpha', 'length(3)'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();$validator->useRules($rules);
         $this->assertNull($validator->executeDefaultValidationInParameter([0 => 'joao']));
     }
 
     public function testGetValidationErrorsNullResult()
     {
         $rules = ['notEmpty', 'notBlank', 'alpha', 'length(2)'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();$validator->useRules($rules);
         $validator->executeDefaultValidationInParameter([0 => 'joao']);
         $result = $validator->getValidationErrors();
         $this->assertEquals(null, $result);
@@ -121,7 +118,8 @@ class RuleValidatorTest extends TestCase
     public function testGetValidationErrorsSingleError()
     {
         $rules = ['notEmpty', 'notBlank', 'alpha', 'length(2)', 'noWhitespace'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();
+        $validator->useRules($rules);
         $validator->executeDefaultValidationInParameter([0 => 'joao do ceu']);
         $result = $validator->getValidationErrors();
         $this->assertEquals(['"joao do ceu" must not contain whitespace'], $result);
@@ -130,7 +128,7 @@ class RuleValidatorTest extends TestCase
     public function testGetValidationErrorsMultiErrors()
     {
         $rules = ['notEmpty', 'notBlank', 'alpha', 'length(50)', 'noWhitespace'];
-        $validator = new RuleValidator($rules);
+        $validator = new RuleValidator();$validator->useRules($rules);
         $validator->executeDefaultValidationInParameter([0 => 'joao do ceu']);
         $result = $validator->getAllValidationErrors();
         $this->assertEquals([
