@@ -33,7 +33,7 @@ use Andresmeireles\RespectAnnotation\ValidationAnnotation as Respect;
 class EntityX
 {
     /**
-    * @Respect({"noBlank"})
+    * @Respect(rules={"noBlank"})
     * Outras anotações do DOCTRINE
     */
     public $name
@@ -53,7 +53,7 @@ use Andresmeireles\RespectAnnotation\ValidationAnnotation as Respect;
 class EntityX
 {
     /**
-    * @Respect({"noBlank"})
+    * @Respect(rules={"noBlank"})
     * Outras anotações do DOCTRINE
     */
     private $name
@@ -67,10 +67,70 @@ class EntityX
 
 ```
 
-``` php
-$skeleton = new League\Skeleton();
-echo $skeleton->echoPhrase('Hello, League!');
+Ja tendo as anotações em seus devidos lugares, para validar e retornar erros crie uma instancia de `RespectValidationAnnotation` e como parametro envie um objeto que contenha anotaçoes validas.
+
 ```
+    $entity = new EntityX();
+    $entity->setName('andre');
+    $validator = new RespectValidationAnnotation()
+    $validator->executeClassValidation($entity)
+```
+
+### Optional & Not Validators
+
+Para usar os validadores optional & not são nescessários criar chaves com suas respectivas regras.
+
+#### Optival parameter
+
+``` php
+
+<?php declare(strict_types = 1);
+
+[..]
+use Andresmeireles\RespectAnnotation\ValidationAnnotation as Respect;
+
+class EntityX
+{
+    /**
+    * @Respect(optrules={"noWhitespace"})
+    * Outras anotações do DOCTRINE
+    */
+    private $name
+
+    public getName()
+    {
+        return $this->name;
+    }
+}
+
+```
+
+#### Not parameter
+
+``` php
+
+<?php declare(strict_types = 1);
+
+[..]
+use Andresmeireles\RespectAnnotation\ValidationAnnotation as Respect;
+
+class EntityX
+{
+    /**
+    * @Respect(notrules={"noWhitespace"})
+    * Outras anotações do DOCTRINE
+    */
+    private $name
+
+    public getName()
+    {
+        return $this->name;
+    }
+}
+
+```
+
+O processo de validar as entidades continua o mesmo.
 
 ## Testing
 
@@ -80,8 +140,9 @@ $ composer test
 
 ## Limitações
 
-Ainda não é possivel utilizar alguns tipos de validadores mais complexos como 
+- Ainda não é possivel utilizar alguns tipos de validadores mais complexos como 
 sf ou zend.
+- Não é possivel usar os validadores optional e not em conunto na mesma chave. i.e `not(optional("noWhitespace"))`
 
 ## Contributing
 
