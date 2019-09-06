@@ -1,3 +1,5 @@
+# ESSE PROJETO É APENAS PARA APLICAÇÃO DE CONCEITO E APRENDIZADO, NÃO É PARA SER USADO EM PRODUÇÃO, PELO MENOS NÃO AINDA
+
 # RESPECT ANNOTATIONS
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
